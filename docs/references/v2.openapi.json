@@ -1184,8 +1184,8 @@
           "content": {
             "application/octet-stream": {
               "schema": {
-                "format": "binary",
-                "type": "array"
+                "type": "string",
+                "format": "binary"
               }
             }
           }
@@ -1223,7 +1223,8 @@
             "content": {
               "application/octet-stream": {
                 "schema": {
-                  "type": "array"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -1481,7 +1482,10 @@
                               "createdAt": "2019-08-24T14:15:22Z",
                               "editedAt": "2019-08-24T14:15:22Z",
                               "deletedAt": "2019-08-24T14:15:22Z",
-                              "body": {}
+                              "body": {},
+                              "metadata": {},
+                              "reactions": [],
+                              "attachments": []
                             }
                           ],
                           "createdAt": "2019-08-24T14:15:22Z",
@@ -1544,10 +1548,10 @@
                           "id": "comment-id",
                           "userId": "alice",
                           "createdAt": "2022-07-13T14:32:50.697Z",
-                          "body": {
-                            "version": 1,
-                            "content": []
-                          }
+                          "body": {},
+                          "metadata": {},
+                          "reactions": [],
+                          "attachments": []
                         }
                       ],
                       "createdAt": "2022-07-13T14:32:50.697Z",
@@ -1585,6 +1589,10 @@
                       "body": {
                         "version": 1,
                         "content": []
+                      },
+                      "metadata": {
+                        "tag": "important",
+                        "spam": false
                       }
                     },
                     "metadata": {
@@ -1648,7 +1656,10 @@
                           "createdAt": "2019-08-24T14:15:22Z",
                           "editedAt": "2019-08-24T14:15:22Z",
                           "deletedAt": "2019-08-24T14:15:22Z",
-                          "body": {}
+                          "body": {},
+                          "metadata": {},
+                          "reactions": [],
+                          "attachments": []
                         }
                       ],
                       "createdAt": "2019-08-24T14:15:22Z",
@@ -1832,7 +1843,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateThread"
+                "$ref": "#/components/schemas/UpdateThreadMetadata"
               },
               "examples": {
                 "example": {
@@ -2219,10 +2230,10 @@
                       "id": "comment-id",
                       "userId": "alice",
                       "createdAt": "2022-07-13T14:32:50.697Z",
-                      "body": {
-                        "version": 1,
-                        "content": []
-                      }
+                      "body": {},
+                      "metadata": {},
+                      "reactions": [],
+                      "attachments": []
                     }
                   }
                 }
@@ -2246,7 +2257,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateComment"
+                "$ref": "#/components/schemas/UpdateComment"
               },
               "examples": {
                 "example": {
@@ -2256,6 +2267,10 @@
                     "body": {
                       "version": 1,
                       "content": []
+                    },
+                    "metadata": {
+                      "tag": "important",
+                      "spam": false
                     }
                   }
                 }
@@ -2319,7 +2334,10 @@
                       "createdAt": "2019-08-24T14:15:22Z",
                       "editedAt": "2019-08-24T14:15:22Z",
                       "deletedAt": "2019-08-24T14:15:22Z",
-                      "body": {}
+                      "body": {},
+                      "metadata": {},
+                      "reactions": [],
+                      "attachments": []
                     }
                   }
                 }
@@ -2388,10 +2406,10 @@
                       "id": "comment-id",
                       "userId": "alice",
                       "createdAt": "2023-07-13T14:32:50.697Z",
-                      "body": {
-                        "version": 1,
-                        "content": []
-                      }
+                      "body": {},
+                      "metadata": {},
+                      "reactions": [],
+                      "attachments": []
                     }
                   }
                 }
@@ -2415,7 +2433,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateComment"
+                "$ref": "#/components/schemas/UpdateComment"
               },
               "examples": {
                 "example": {
@@ -2631,6 +2649,90 @@
                     "emoji": "👨‍👩‍👧",
                     "userId": "alice",
                     "removedAt": "2022-07-13T14:32:50.697Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/threads/{threadId}/comments/{commentId}/metadata": {
+      "post": {
+        "summary": "Edit comment metadata",
+        "tags": ["Comments"],
+        "description": "This endpoint edits the metadata of a comment. The metadata is a JSON object that can be used to store any information you want about the comment, in `string`, `number`, or `boolean` form. Set a property to `null` to remove it. Corresponds to [`liveblocks.editCommentMetadata`](/docs/api-reference/liveblocks-node#post-rooms-roomId-threads-threadId-comments-commentId-metadata).",
+        "operationId": "post-rooms-roomId-threads-threadId-comments-commentId-metadata",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the room"
+          },
+          {
+            "name": "threadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the thread"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the comment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns the updated metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentMetadata"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "tag": "important",
+                      "reviewed": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-comment"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentMetadata"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "metadata": {
+                      "tag": null,
+                      "reviewed": true
+                    },
+                    "userId": "alice",
+                    "updatedAt": "2023-07-13T14:32:50.697Z"
                   }
                 }
               }
@@ -5215,7 +5317,10 @@
                 "createdAt": "2019-08-24T14:15:22Z",
                 "editedAt": "2019-08-24T14:15:22Z",
                 "deletedAt": "2019-08-24T14:15:22Z",
-                "body": {}
+                "body": {},
+                "metadata": {},
+                "reactions": [],
+                "attachments": []
               }
             ],
             "createdAt": "2019-08-24T14:15:22Z",
@@ -5252,6 +5357,9 @@
                     }
                   }
                 }
+              },
+              "metadata": {
+                "$ref": "#/components/schemas/CommentMetadata"
               }
             },
             "required": ["userId", "body"]
@@ -5269,6 +5377,10 @@
               "body": {
                 "version": 1,
                 "content": []
+              },
+              "metadata": {
+                "tag": "important",
+                "spam": false
               }
             },
             "metadata": {
@@ -5278,8 +5390,8 @@
         ],
         "description": ""
       },
-      "UpdateThread": {
-        "title": "UpdateThread",
+      "UpdateThreadMetadata": {
+        "title": "UpdateThreadMetadata",
         "type": "object",
         "properties": {
           "metadata": {
@@ -5308,14 +5420,67 @@
       "ThreadMetadata": {
         "type": "object",
         "title": "ThreadMetadata",
-        "properties": {
-          "type": "object"
-        },
+        "additionalProperties": true,
         "required": [],
         "examples": [
           {
             "color": "blue",
             "age": 25
+          }
+        ],
+        "description": ""
+      },
+      "CommentBody": {
+        "type": "object",
+        "title": "CommentBody",
+        "properties": {
+          "version": {
+            "type": "number"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "CommentMetadata": {
+        "type": "object",
+        "title": "CommentMetadata",
+        "additionalProperties": true,
+        "required": [],
+        "examples": [
+          {
+            "tag": "important",
+            "spam": false
+          }
+        ],
+        "description": ""
+      },
+      "UpdateCommentMetadata": {
+        "title": "UpdateCommentMetadata",
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["metadata", "userId"],
+        "examples": [
+          {
+            "metadata": {
+              "tag": "important"
+            },
+            "userId": "alice",
+            "updatedAt": "2023-07-13T14:32:50.697Z"
           }
         ],
         "description": ""
@@ -5355,7 +5520,10 @@
             "format": "date-time"
           },
           "body": {
-            "type": "object"
+            "$ref": "#/components/schemas/CommentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/CommentMetadata"
           }
         },
         "required": ["type", "threadId", "roomId", "id", "userId", "createdAt"],
@@ -5369,7 +5537,10 @@
             "createdAt": "2019-08-24T14:15:22Z",
             "editedAt": "2019-08-24T14:15:22Z",
             "deletedAt": "2019-08-24T14:15:22Z",
-            "body": {}
+            "body": {},
+            "metadata": {},
+            "reactions": [],
+            "attachments": []
           }
         ]
       },
@@ -5385,18 +5556,10 @@
             "format": "date-time"
           },
           "body": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "number"
-              },
-              "content": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              }
-            }
+            "$ref": "#/components/schemas/CommentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/CommentMetadata"
           }
         },
         "required": ["userId", "body"],
@@ -5407,6 +5570,10 @@
             "body": {
               "version": 1,
               "content": []
+            },
+            "metadata": {
+              "tag": "important",
+              "spam": false
             }
           }
         ],
@@ -5421,18 +5588,10 @@
             "format": "date-time"
           },
           "body": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "number"
-              },
-              "content": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              }
-            }
+            "$ref": "#/components/schemas/CommentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/CommentMetadata"
           }
         },
         "required": ["body"],
@@ -5442,6 +5601,10 @@
             "body": {
               "version": 1,
               "content": []
+            },
+            "metadata": {
+              "tag": "important",
+              "spam": false
             }
           }
         ],
@@ -5740,6 +5903,9 @@
               "knowledgePrompt": {
                 "type": "string"
               },
+              "alwaysUseKnowledge": {
+                "type": "boolean"
+              },
               "provider": {
                 "const": "openai"
               },
@@ -5837,6 +6003,9 @@
               },
               "knowledgePrompt": {
                 "type": "string"
+              },
+              "alwaysUseKnowledge": {
+                "type": "boolean"
               },
               "provider": {
                 "const": "anthropic"
@@ -5948,6 +6117,9 @@
               "knowledgePrompt": {
                 "type": "string"
               },
+              "alwaysUseKnowledge": {
+                "type": "boolean"
+              },
               "provider": {
                 "const": "google"
               },
@@ -6028,6 +6200,9 @@
               "knowledgePrompt": {
                 "type": "string"
               },
+              "alwaysUseKnowledge": {
+                "type": "boolean"
+              },
               "provider": {
                 "const": "openai-compatible"
               },
@@ -6091,6 +6266,10 @@
           },
           "knowledgePrompt": {
             "type": "string",
+            "nullable": true
+          },
+          "alwaysUseKnowledge": {
+            "type": "boolean",
             "nullable": true
           },
           "providerApiKey": {
@@ -6231,6 +6410,10 @@
           },
           "knowledgePrompt": {
             "type": "string",
+            "nullable": true
+          },
+          "alwaysUseKnowledge": {
+            "type": "boolean",
             "nullable": true
           },
           "providerApiKey": {
@@ -6404,6 +6587,7 @@
         "type": "object",
         "oneOf": [
           {
+            "title": "WebKnowledgeSource",
             "properties": {
               "type": {
                 "const": "ai-knowledge-web-source"
@@ -6445,6 +6629,7 @@
             }
           },
           {
+            "title": "FileKnowledgeSource",
             "properties": {
               "type": {
                 "const": "ai-knowledge-file-source"
@@ -6557,149 +6742,149 @@
             }
           }
         }
-      }
-    },
-    "Group": {
-      "title": "Group",
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["group"]
-        },
-        "id": {
-          "type": "string"
-        },
-        "tenantId": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "scopes": {
-          "type": "object",
-          "properties": {
-            "mention": {
-              "type": "boolean"
+      },
+      "Group": {
+        "title": "Group",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["group"]
+          },
+          "id": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scopes": {
+            "type": "object",
+            "properties": {
+              "mention": {
+                "type": "boolean"
+              }
+            }
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupMember"
             }
           }
         },
-        "members": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/GroupMember"
-          }
-        }
+        "required": [
+          "type",
+          "id",
+          "tenantId",
+          "createdAt",
+          "updatedAt",
+          "scopes",
+          "members"
+        ]
       },
-      "required": [
-        "type",
-        "id",
-        "tenantId",
-        "createdAt",
-        "updatedAt",
-        "scopes",
-        "members"
-      ]
-    },
-    "GroupMember": {
-      "title": "GroupMember",
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "addedAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      },
-      "required": ["id", "addedAt"]
-    },
-    "CreateGroup": {
-      "title": "CreateGroup",
-      "type": "object",
-      "properties": {
-        "groupId": {
-          "type": "string"
-        },
-        "memberIds": {
-          "type": "array",
-          "items": {
+      "GroupMember": {
+        "title": "GroupMember",
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "string"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
-        "tenantId": {
-          "type": "string"
-        },
-        "scopes": {
-          "type": "object",
-          "properties": {
-            "mention": {
-              "type": "boolean"
+        "required": ["id", "addedAt"]
+      },
+      "CreateGroup": {
+        "title": "CreateGroup",
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "memberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "object",
+            "properties": {
+              "mention": {
+                "type": "boolean"
+              }
             }
           }
-        }
+        },
+        "required": ["groupId"]
       },
-      "required": ["groupId"]
-    },
-    "AddGroupMembers": {
-      "title": "AddGroupMembers",
-      "type": "object",
-      "properties": {
-        "memberIds": {
-          "type": "array",
-          "items": {
+      "AddGroupMembers": {
+        "title": "AddGroupMembers",
+        "type": "object",
+        "properties": {
+          "memberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["memberIds"]
+      },
+      "RemoveGroupMembers": {
+        "title": "RemoveGroupMembers",
+        "type": "object",
+        "properties": {
+          "memberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["memberIds"]
+      },
+      "GetGroups": {
+        "title": "GetGroups",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "nextCursor": {
             "type": "string"
           }
         }
       },
-      "required": ["memberIds"]
-    },
-    "RemoveGroupMembers": {
-      "title": "RemoveGroupMembers",
-      "type": "object",
-      "properties": {
-        "memberIds": {
-          "type": "array",
-          "items": {
+      "GetUserGroups": {
+        "title": "GetUserGroups",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "nextCursor": {
             "type": "string"
           }
-        }
-      },
-      "required": ["memberIds"]
-    },
-    "GetGroups": {
-      "title": "GetGroups",
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/Group"
-          }
-        },
-        "nextCursor": {
-          "type": "string"
-        }
-      }
-    },
-    "GetUserGroups": {
-      "title": "GetUserGroups",
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/Group"
-          }
-        },
-        "nextCursor": {
-          "type": "string"
         }
       }
     },
