@@ -15,10 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type { IServerWebSocket } from "./IServerWebSocket";
-export type {
-  IReadableSnapshot,
-  IStorageDriver,
-  IStorageDriverNodeAPI,
-} from "./IStorageDriver";
-export type { LeasedSession } from "~/types";
+import Bun from "bun";
+
+/**
+ * Check if a port is already in use by attempting a TCP
+ * connection.
+ */
+export function isPortInUse(port: number, hostname: string): Promise<boolean> {
+  const { promise, resolve } = Promise.withResolvers<boolean>();
+  void Bun.connect({
+    hostname,
+    port,
+    socket: {
+      data() {}, // prettier-ignore
+      open(socket) { socket.end(); resolve(true) }, // prettier-ignore
+      error() { resolve(false) }, // prettier-ignore
+      connectError() { resolve(false) }, // prettier-ignore
+    },
+  });
+  return promise;
+}

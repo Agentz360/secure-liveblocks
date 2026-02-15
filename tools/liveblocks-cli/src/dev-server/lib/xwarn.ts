@@ -15,10 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type { IServerWebSocket } from "./IServerWebSocket";
-export type {
-  IReadableSnapshot,
-  IStorageDriver,
-  IStorageDriverNodeAPI,
-} from "./IStorageDriver";
-export type { LeasedSession } from "~/types";
+import { yellow } from "~/lib/term-colors";
+
+const seenWarnings = new Set<string>();
+
+export function warnOnce(message: string | undefined, key = message): void {
+  if (key && !seenWarnings.has(key)) {
+    seenWarnings.add(key);
+    console.log(yellow(`  ⚠ ${message ?? key}`));
+  }
+}
+
+export function clearWarnings(): void {
+  seenWarnings.clear();
+}

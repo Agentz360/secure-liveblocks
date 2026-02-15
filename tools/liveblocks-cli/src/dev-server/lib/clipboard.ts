@@ -15,10 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type { IServerWebSocket } from "./IServerWebSocket";
-export type {
-  IReadableSnapshot,
-  IStorageDriver,
-  IStorageDriverNodeAPI,
-} from "./IStorageDriver";
-export type { LeasedSession } from "~/types";
+import { execSync } from "node:child_process";
+
+export function copyToClipboard(text: string): void {
+  const cmd =
+    process.platform === "darwin"
+      ? "pbcopy"
+      : process.platform === "win32"
+        ? "clip.exe"
+        : "xclip -selection clipboard";
+
+  execSync(cmd, { input: text });
+}
