@@ -22,7 +22,7 @@ import { ZenRelay } from "@liveblocks/zenrouter";
 import Bun from "bun";
 
 import type { SubCommand } from "~/interfaces/SubCommand";
-import { dim, green, red, yellow } from "~/lib/term-colors";
+import { bold, dim, green, red, yellow } from "~/lib/term-colors";
 
 import { authorizeWebSocket } from "./auth";
 import type { ClientMeta, RoomMeta, SessionMeta } from "./db/rooms";
@@ -115,8 +115,13 @@ const dev: SubCommand = {
       return;
     }
 
-    const port = parsePort(args.port) ?? DEFAULT_PORT;
-    const hostname = args.host || "localhost";
+    // Precedence: CLI flag > env var > default
+    const port =
+      parsePort(args.port) ??
+      parsePort(process.env.LIVEBLOCKS_DEVSERVER_PORT) ??
+      DEFAULT_PORT;
+    const hostname =
+      args.host || process.env.LIVEBLOCKS_DEVSERVER_HOST || "localhost";
 
     if (await isPortInUse(port, hostname)) {
       console.error(
@@ -247,7 +252,7 @@ const dev: SubCommand = {
     const configIssues = await checkLiveblocksSetup(port);
     const baseUrl = `http://localhost:${port}`;
 
-    console.log(dim("Press q to quit, c to clear"));
+    console.log(dim("Press ") + bold("q") + dim(" to quit, ") + bold("c") + dim(" to clear"));
 
     // Listen for keypresses
     if (process.stdin.isTTY) {
